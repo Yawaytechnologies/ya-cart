@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+:root{
+  --paper:#E9E1D4;   /* beige when solid */
+  --ink:#4B3A32;     /* brown text/icons on solid */
+  --line:#D9CFC2;    /* dividers on solid */
+  --edge:#3D2F28;    /* hairline */
+}
+
+
+html, body { background: var(--paper); }
