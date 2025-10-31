@@ -6,10 +6,7 @@ import Stack4 from "../assets/sttack-4.jpg";    // RIGHT big
 import Rotate from "../assets/Rotate.svg";
 import Stock  from "../assets/stttack-1.jpg";   // center image under CTA
 
-/**
- * Props:
- *  strength, leftBigSpeed, leftSmallSpeed, rightBigSpeed, rightSmallSpeed, centerImageSpeed, disableOnRRM
- */
+
 export default function HeroStackedShowcase({
   strength = 0.98,
   leftBigSpeed = 0.24,

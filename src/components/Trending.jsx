@@ -1,8 +1,7 @@
-
 import React from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import { useCart } from "../components/CardContext"; // ← add
+import { useCart } from "../components/CardContext";
 import chair from "../assets/chair.png";
 import lamp from "../assets/lamp.png";
 import table from "../assets/table.png";
@@ -17,18 +16,19 @@ const fadeUpStagger = {
 const childFadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } } };
 
 export default function TrendingThisSeason() {
-  const { add } = useCart(); // ← use cart
+  const { add } = useCart();
 
   const items = [
-    { id: "chair-1", title: "Plush White Chair", price: 520, img: chair },
-    { id: "lamp-1",  title: "Tripod table lamp", price: 344, img: lamp },
-    { id: "table-1", title: "Hexagonal table",   price: 450, img: table },
-    { id: "tap-1",   title: "Designer Glass Table", price: 220, img: tap },
+    { id: "chair-1", title: "Plush White Chair",    price: 520, img: chair },
+    { id: "lamp-1",  title: "Tripod table lamp",     price: 344, img: lamp },
+    { id: "table-1", title: "Hexagonal table",       price: 450, img: table },
+    { id: "tap-1",   title: "Designer Glass Table",  price: 220, img: tap },
   ];
 
   return (
     <section className="bg-[var(--paper)]">
       <div className="mx-auto max-w-[1200px] px-5 md:px-8">
+
         {/* Header */}
         <motion.div
           className="pt-[72px] md:pt-[96px]"
@@ -69,7 +69,7 @@ export default function TrendingThisSeason() {
               variants={childFadeUp}
               transition={{ duration: 0.6, ease: EASE, delay: idx * 0.02 }}
             >
-              {/* Card */}
+              {/* Media card */}
               <div className="relative aspect-[5/6] overflow-hidden border border-[var(--line)] bg-[var(--paper)] soft-shadow">
                 <img
                   src={p.img}
@@ -78,14 +78,19 @@ export default function TrendingThisSeason() {
                   loading="lazy"
                 />
 
-                {/* CTA */}
+                {/* Desktop overlay CTA (hover) */}
                 <button
                   type="button"
-                  onClick={() => add(p, 1)}   // ← add to cart
-                  className="absolute left-1/2 -translate-x-1/2 bottom-6 px-6 sm:px-8 py-3 text-xs sm:text-sm md:text-[15px]
-                             font-semibold uppercase tracking-[.08em] sm:tracking-[.12em] whitespace-nowrap leading-none
-                             bg-[var(--light)] border border-[var(--line-strong)] text-[var(--edge)] shadow-sm
-                             transition-all duration-300 ease-out opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0"
+                  onClick={() => add(p, 1)}
+                  className="
+                    absolute left-1/2 -translate-x-1/2 bottom-6
+                    hidden md:inline-flex
+                    px-6 lg:px-8 py-3 text-xs sm:text-sm md:text-[15px]
+                    font-semibold uppercase tracking-[.08em] lg:tracking-[.12em]
+                    bg-[var(--light)] border border-[var(--line-strong)] text-[var(--edge)] shadow-sm
+                    transition-all duration-300 ease-out
+                    md:opacity-0 md:translate-y-3 md:group-hover:opacity-100 md:group-hover:translate-y-0
+                  "
                   aria-label={`Add ${p.title} to cart`}
                 >
                   ADD TO CART
@@ -97,6 +102,21 @@ export default function TrendingThisSeason() {
                 <p className="text-[var(--ink)] text-md md:text-xl">{p.title}</p>
                 <p className="text-[var(--ink)] text-xl md:text-xl font-medium">${p.price}</p>
               </div>
+
+              {/* Mobile CTA (separate row; always visible) */}
+              <button
+                type="button"
+                onClick={() => add(p, 1)}
+                className="
+                  md:hidden mt-3 w-full
+                  px-4 py-3 text-[13px] font-semibold uppercase tracking-[.10em]
+                  bg-[var(--light)] border border-[var(--line-strong)] text-[var(--edge)] shadow-sm
+                  active:translate-y-[1px] transition
+                "
+                aria-label={`Add ${p.title} to cart`}
+              >
+                ADD TO CART
+              </button>
             </motion.article>
           ))}
         </motion.div>
