@@ -11,10 +11,10 @@ export default function ShippingMarquee({
   speed = 140,
   gap = 56,
   height = 50,
-  background = "#E9E1D4",
+  background = "#F4F1EA",
   textStyle = { fontSize: 15, fontWeight: 600, letterSpacing: 0.2 },
   showBorders = true,
-  borderColor = "#D9CFC2",          // <-- changed default to black
+  borderColor = "#BCB2A5",          // <-- changed default to black
   borderWidth = 1,               // <-- new: control thickness (px)
 }) {
   const containerRef = useRef(null);

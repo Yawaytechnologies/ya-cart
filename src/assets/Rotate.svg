@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- TOP semicircle arc with smaller radius to create extra gap -->
+    <path id="topInnerArc" d="M 232 512 A 280 280 0 0 1 792 512" />
+    <!-- BOTTOM semicircle arc (kept at original radius) -->
+    <path id="bottomInnerArc" d="M 812 512 A 300 300 0 0 1 212 512" />
+    <symbol id="smallStar" viewBox="0 0 100 100">
+      <polygon points="50,5 61,36 95,36 67,55 77,90 50,70 23,90 33,55 5,36 39,36" />
+    </symbol>
+  </defs>
+
+  <!-- Outer ring -->
+  <circle cx="512" cy="512" r="420" stroke="black" stroke-width="18" fill="none"/>
+  <!-- Inner dotted ring -->
+  <circle cx="512" cy="512" r="360" stroke="black" stroke-width="8" fill="none" stroke-dasharray="4 14" />
+
+  <!-- Side dots -->
+  <circle cx="212" cy="512" r="10" fill="black" />
+  <circle cx="812" cy="512" r="10" fill="black" />
+
+  <!-- Curved text INSIDE the circle -->
+  <text font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="78" fill="black" letter-spacing="6">
+    <textPath href="#topInnerArc" startOffset="50%" text-anchor="middle">YACART</textPath>
+  </text>
+
+  <text font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="62" fill="black" letter-spacing="5">
+    <textPath href="#bottomInnerArc" startOffset="50%" text-anchor="middle">HOT COLLECTION</textPath>
+  </text>
+
+  <!-- Center badge -->
+  <g transform="translate(512,512)">
+    <circle r="150" stroke="black" stroke-width="10" fill="none"/>
+    <use href="#smallStar" width="90" height="90" x="-45" y="-45" fill="black"/>
+  </g>
+</svg>
