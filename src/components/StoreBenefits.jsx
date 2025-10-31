@@ -31,14 +31,14 @@ export default function StoreBenefits() {
     <section className="w-full bg-[#FBF5EE]">
       <div className="mx-auto max-w-[1200px] px-6 py-16 md:py-20">
         <div className="grid items-start gap-12 md:grid-cols-3 md:gap-10">
-          {items.map(({ title, desc, Icon }) => (
-            <div key={title} className="text-center">
-              <Icon className="mx-auto mb-6 h-12 w-12 text-[#3E3127]" />
+          {items.map((item) => (
+            <div key={item.title} className="text-center">
+              <item.Icon className="mx-auto mb-6 h-12 w-12 text-[#3E3127]" />
               <h3 className="text-[26px] leading-tight md:text-[28px] font-semibold text-[#3E3127]">
-                {title}
+                {item.title}
               </h3>
               <p className="mx-auto mt-4 max-w-[420px] text-[18px] leading-8 text-[#5a4a3f]">
-                {desc}
+                {item.desc}
               </p>
             </div>
           ))}

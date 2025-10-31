@@ -1,6 +1,8 @@
+// src/components/Hero.jsx
 import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -26,7 +28,8 @@ export default function ShopHeroPage() {
   const ZOOM_SECONDS = 7.0;
   const zoomTransition = { duration: ZOOM_SECONDS, ease: [0.16, 0.84, 0.22, 1] };
 
-  const playCopy = (idx, swiper) => {
+  // removed unused param to satisfy no-unused-vars
+  const playCopy = (idx) => {
     copyRefs.current.forEach((el) => {
       if (!el) return;
       el.classList.remove("play");
@@ -56,12 +59,12 @@ export default function ShopHeroPage() {
           onInit={(sw) => {
             const idx = sw.realIndex ?? sw.activeIndex ?? 0;
             setActive(idx);
-            playCopy(idx, sw);
+            playCopy(idx);
           }}
           onSlideChange={(sw) => {
             const idx = sw.realIndex ?? sw.activeIndex ?? 0;
             setActive(idx);
-            playCopy(idx, sw);
+            playCopy(idx);
           }}
           className="w-full h-full"
         >
@@ -151,15 +154,12 @@ export default function ShopHeroPage() {
 
         {/* MUCH SLOWER text enter animations */}
         <style>{`
-          /* Hidden pre-state until 'play' is added to this slide's copy */
           .hero-copy:not(.play) .hero-line { opacity: 0; transform: translateY(-56px); }
           .hero-copy:not(.play) .hero-cta  { opacity: 0; transform: translateY(56px); }
 
-          /* Slow animations on activation */
           .hero-copy.play .hero-line { animation: dropIn 2000ms cubic-bezier(.18,.8,.2,1) both; }
           .hero-copy.play .hero-cta  { animation: riseIn 2000ms cubic-bezier(.18,.8,.2,1) both; }
 
-          /* Longer stagger */
           .hero-copy.play .delay-0 { animation-delay:   0ms; }
           .hero-copy.play .delay-1 { animation-delay: 300ms; }
           .hero-copy.play .delay-2 { animation-delay: 600ms; }

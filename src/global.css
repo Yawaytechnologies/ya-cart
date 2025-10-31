@@ -3,6 +3,7 @@
 
 /* ====== Theme ====== */
 :root{
+  --head: 110px;
   --paper:#F4F1EA;
   --ink:#4B3A32;
   --line:#C8BEB2;          /* light line */

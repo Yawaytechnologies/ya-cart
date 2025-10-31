@@ -1,5 +1,6 @@
-// src/components/TrendingThisSeason.jsx
+
 import React from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { useCart } from "../components/CardContext"; // ← add
 import chair from "../assets/chair.png";

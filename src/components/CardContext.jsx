@@ -1,3 +1,4 @@
+/* eslint react-refresh/only-export-components: ["warn", { "allowConstantExport": true }] */
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 
 const CartCtx = createContext(null);
@@ -34,8 +35,9 @@ export function CartProvider({ children }) {
   return <CartCtx.Provider value={value}>{children}</CartCtx.Provider>;
 }
 
-export function useCart() {
+// export hook as a constant (allowed by the rule config above)
+export const useCart = () => {
   const ctx = useContext(CartCtx);
   if (!ctx) throw new Error("useCart must be used inside <CartProvider>");
   return ctx;
-}
+};
