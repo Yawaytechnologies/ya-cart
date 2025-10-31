@@ -3,7 +3,7 @@ import Stack1 from "../assets/sttack-1.png";    // LEFT small
 import Stack2 from "../assets/sttttack-2.jpg";  // LEFT big
 import Stack3 from "../assets/sttack-3.png";    // RIGHT small
 import Stack4 from "../assets/sttack-4.jpg";    // RIGHT big
-import Rotate from "../assets/rotate.svg";
+import Rotate from "../assets/Rotate.svg";
 import Stock  from "../assets/stttack-1.jpg";   // center image under CTA
 
 /**
