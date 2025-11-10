@@ -1,13 +1,15 @@
 // src/components/HeaderFloatingSolid.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { FiMenu, FiShoppingCart, FiUser } from "react-icons/fi";
+import { FiMenu, FiShoppingCart, FiUser, FiHeart } from "react-icons/fi";
 import { useLocation, Link } from "react-router-dom";
 import CartSidebar from "./CartSidebar";
-import { useCart } from "../components/CardContext";
+import { useCart } from "./CardContext";
+import { useWishlist } from "../contexts/wishlistContext";
+
 
 /* ----------------------- Mobile Drawer (Portal) ----------------------- */
-function MobileNavDrawer({ open, onClose, isTransparent }) {
+function MobileNavDrawer({ open, onClose, isTransparent, wishCount = 0 }) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -49,6 +51,7 @@ function MobileNavDrawer({ open, onClose, isTransparent }) {
           {[
             { label: "Home", href: "/" },
             { label: "Products", href: "/products" },
+            // leaving Wishlist inside the drawer menu is fine; header icon handles top bar
             { label: "Wishlist", href: "/wishlist" },
             { label: "Contact Us", href: "/contact" },
           ].map((item) => (
@@ -56,9 +59,14 @@ function MobileNavDrawer({ open, onClose, isTransparent }) {
               key={item.href}
               to={item.href}
               onClick={onClose}
-              className="block rounded-lg px-3 py-3 text-[15px] font-semibold tracking-[.04em] uppercase hover:bg-black/[.04]"
+              className="relative block rounded-lg px-3 py-3 text-[15px] font-semibold tracking-[.04em] uppercase hover:bg:black/[.04]"
             >
               {item.label}
+              {item.label === "Wishlist" && wishCount > 0 && (
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 min-w-[18px] h-[18px] rounded-full bg-[color:var(--ink,#4B3A32)] text-white text-[11px] leading-[18px] text-center px-1">
+                  {wishCount}
+                </span>
+              )}
             </Link>
           ))}
         </nav>
@@ -73,6 +81,7 @@ function MobileNavDrawer({ open, onClose, isTransparent }) {
 /* ======================== Header (Mobile + Desktop) ======================== */
 export default function HeaderFloatingSolid({ logoSrc }) {
   const { items, count, inc, dec, remove, open, setOpen } = useCart();
+  const { count: wishCount } = useWishlist();
   const { pathname } = useLocation();
   const isHome = pathname === "/";
 
@@ -110,7 +119,6 @@ export default function HeaderFloatingSolid({ logoSrc }) {
   /* ------------------- MOBILE header (md:hidden) ------------------- */
   const mobileRef = useRef(null);
   useEffect(() => {
-    // Only set --head when < md so we don't fight desktop header.
     const el = mobileRef.current;
     if (!el) return;
     const mql = window.matchMedia("(min-width: 768px)");
@@ -212,60 +220,89 @@ export default function HeaderFloatingSolid({ logoSrc }) {
     </button>
   );
 
+  // NEW: Wishlist icon button (desktop)
+  const WishlistIconButtonDesktop = (
+    <Link
+      to="/wishlist"
+      className={`${ROW_H} ${PADX} relative grid place-items-center border-l ${divider}`}
+      aria-label="Open wishlist"
+    >
+      <FiHeart className={`${text} text-[20px]`} />
+      {wishCount > 0 && (
+        <span className="absolute top-2 right-2 min-w-[18px] h-[18px] rounded-full text-[11px] leading-[18px] text-white bg-[color:var(--ink,#4B3A32)] text-center">
+          {wishCount}
+        </span>
+      )}
+    </Link>
+  );
+
   return (
     <>
-   
-<div
-  ref={mobileRef}
-  className="md:hidden sticky top-0 z-[90] bg-[var(--paper,#fff)]"
->
-  <div className="h-[6px] bg-[color:var(--edge,#3D2F28)]" />
-  <div className="border-b border-[color:var(--line-strong,#9F917F)]">
-    <div className="flex items-center justify-between">
-      {/* left: hamburger */}
-      <button
-        type="button"
-        onClick={() => setDrawerOpen(true)}
-        aria-label="Open menu"
-        className="h-14 px-5 grid place-items-center text-neutral-900"
+      {/* ========== MOBILE HEADER ========== */}
+      <div
+        ref={mobileRef}
+        className="md:hidden sticky top-0 z-[90] bg-[var(--paper,#fff)]"
       >
-        <FiMenu className="text-[22px]" />
-      </button>
+        <div className="h-[6px] bg-[color:var(--edge,#3D2F28)]" />
+        <div className="border-b border-[color:var(--line-strong,#9F917F)]">
+          <div className="flex items-center justify-between">
+            {/* left: hamburger */}
+            <button
+              type="button"
+              onClick={() => setDrawerOpen(true)}
+              aria-label="Open menu"
+              className="h-14 px-5 grid place-items-center text-neutral-900"
+            >
+              <FiMenu className="text-[22px]" />
+            </button>
 
-      {/* center: brand — force black on mobile */}
-      <Link to="/" className="h-14 px-5 inline-flex items-center">
-        {logoSrc ? (
-          <img src={logoSrc} alt="Logo" className="h-6 object-contain" />
-        ) : (
-          <span className="text-neutral-900 text-lg font-extrabold tracking-tight">
-            YaCart
-          </span>
-        )}
-      </Link>
+            {/* center: brand — force black on mobile */}
+            <Link to="/" className="h-14 px-5 inline-flex items-center">
+              {logoSrc ? (
+                <img src={logoSrc} alt="Logo" className="h-6 object-contain" />
+              ) : (
+                <span className="text-neutral-900 text-lg font-extrabold tracking-tight">
+                  YaCart
+                </span>
+              )}
+            </Link>
 
-      {/* right: cart + profile — black */}
-      <div className="flex items-center text-neutral-900">
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-label="Open cart"
-          className="h-14 px-5 relative grid place-items-center"
-        >
-          <FiShoppingCart className="text-[20px]" />
-          {count > 0 && (
-            <span className="absolute top-2 right-2 min-w-[18px] h-[18px] rounded-full text-[11px] leading-[18px] text-white bg-neutral-900 text-center">
-              {count}
-            </span>
-          )}
-        </button>
-        <Link to="/account" aria-label="Account" className="h-14 px-5 grid place-items-center">
-          <FiUser className="text-[20px]" />
-        </Link>
+            {/* right: wishlist + cart + profile */}
+            <div className="flex items-center text-neutral-900">
+              {/* NEW: Wishlist icon (mobile) */}
+              <Link
+                to="/wishlist"
+                aria-label="Open wishlist"
+                className="h-14 px-5 relative grid place-items-center"
+              >
+                <FiHeart className="text-[20px]" />
+                {wishCount > 0 && (
+                  <span className="absolute top-2 right-2 min-w-[18px] h-[18px] rounded-full text-[11px] leading-[18px] text-white bg-neutral-900 text-center">
+                    {wishCount}
+                  </span>
+                )}
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setOpen(true)}
+                aria-label="Open cart"
+                className="h-14 px-5 relative grid place-items-center"
+              >
+                <FiShoppingCart className="text-[20px]" />
+                {count > 0 && (
+                  <span className="absolute top-2 right-2 min-w-[18px] h-[18px] rounded-full text-[11px] leading-[18px] text-white bg-neutral-900 text-center">
+                    {count}
+                  </span>
+                )}
+              </button>
+              <Link to="/profile" aria-label="Profile" className="h-14 px-5 grid place-items-center">
+                <FiUser className="text-[20px]" />
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
-
 
       {/* ========== DESKTOP HEADER (md+) ========== */}
       <header
@@ -287,12 +324,11 @@ export default function HeaderFloatingSolid({ logoSrc }) {
                 </Link>
               </div>
 
-              {/* desktop nav */}
+              {/* desktop nav — Wishlist text REMOVED */}
               <nav className="hidden md:flex items-center">
                 {[
                   { label: "Home", href: "/" },
                   { label: "Products", href: "/products" },
-                  { label: "Wishlist", href: "/wishlist" },
                   { label: "Contact Us", href: "/contact" },
                 ].map((item, i, arr) => (
                   <Link
@@ -307,10 +343,11 @@ export default function HeaderFloatingSolid({ logoSrc }) {
                 ))}
               </nav>
 
-              {/* desktop right controls */}
+              {/* desktop right controls: Wishlist icon near cart */}
               <div className="hidden md:flex items-center">
+                <div className={`border-l ${divider}`}>{WishlistIconButtonDesktop}</div>
                 <div className={`border-l ${divider}`}>{CartButton}</div>
-                <Link to="/account" className={`${ROW_H} ${PADX} grid place-items-center border-l ${divider}`} aria-label="Account">
+                <Link to="/profile" className={`${ROW_H} ${PADX} grid place-items-center border-l ${divider}`} aria-label="Profile">
                   <FiUser className={`${text} text-[20px]`} />
                 </Link>
               </div>
@@ -319,11 +356,12 @@ export default function HeaderFloatingSolid({ logoSrc }) {
         </div>
       </header>
 
-      {/* Mobile drawer (opens from hamburger) */}
+      {/* Mobile drawer */}
       <MobileNavDrawer
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         isTransparent={false}
+        wishCount={wishCount}
       />
 
       {/* Cart sidebar */}
