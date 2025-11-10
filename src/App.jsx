@@ -10,6 +10,9 @@ import Home from "./pages/Home";
 import CartPage from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Contact from "./pages/Contact";
+import Profile from "./pages/Profile";
+import Wishlist from "./pages/Wishlist";
+
 /* ------------- Scroll to top on route change ------------- */
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -24,7 +27,9 @@ function NotFound() {
   return (
     <main className="min-h-[50vh] grid place-items-center bg-[#F6F2EC] px-6">
       <div className="text-center">
-        <h1 className="text-3xl font-semibold text-[#3B312A]">Page not found</h1>
+        <h1 className="text-3xl font-semibold text-[#3B312A]">
+          Page not found
+        </h1>
         <p className="mt-3 text-[#7a6d61]">
           The page you’re looking for doesn’t exist.
         </p>
@@ -52,6 +57,8 @@ export default function App() {
          
           <Route path="/product/:slug" element={<ProductDetails />} />
           <Route path="/home" element={<Navigate to="/" replace />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
