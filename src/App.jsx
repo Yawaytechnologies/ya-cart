@@ -49,6 +49,7 @@ export default function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/products" element={<Products />} />
           <Route path="/contact" element={<Contact />} />
+         
           <Route path="/product/:slug" element={<ProductDetails />} />
           <Route path="/home" element={<Navigate to="/" replace />} />
           <Route path="*" element={<NotFound />} />
