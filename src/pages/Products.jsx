@@ -1,20 +1,36 @@
-
+// src/pages/Products.jsx
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { PRODUCTS, CATS } from "../components/Data/ProductData";
-import { useCart } from "../components/CardContext";
 
+// ✅ correct path to your data file (see your tree: src/components/Data/ProductData.js)
+import { PRODUCTS, CATS } from "../components/Data/ProductData.js";
+
+// ✅ other imports
+import { useCart } from "../components/CardContext";
+import WishButton from "../components/WishButton";
+
+// ✅ named import (NOT default)
+import { useWishlist } from "../contexts/wishlistContext";
+
+/* ----- Stars ----- */
 function Stars({ value = 4.5 }) {
-  const full = Math.floor(value), half = value - full >= 0.5;
+  const full = Math.floor(value);
+  const half = value - full >= 0.5;
   return (
     <div className="inline-flex items-center gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => {
         const type = i < full ? "full" : i === full && half ? "half" : "empty";
         return (
-          <svg key={i} width="16" height="16" viewBox="0 0 24 24"
-               fill={type === "empty" ? "none" : "currentColor"}
-               stroke="currentColor" strokeWidth={type === "empty" ? 1.5 : 0}
-               className="text-[#7a6d61]">
+          <svg
+            key={i}
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill={type === "empty" ? "none" : "currentColor"}
+            stroke="currentColor"
+            strokeWidth={type === "empty" ? 1.5 : 0}
+            className="text-[#7a6d61]"
+          >
             {type === "half" ? (
               <>
                 <defs>
@@ -27,7 +43,7 @@ function Stars({ value = 4.5 }) {
                 <path d="M12 .7l3.1 6.3 7 .9-5 4.9 1.2 7-6.3-3.2-6.3 3.2 1.2-7-5-4.9 7-.9L12 .7Z" fill="none" stroke="currentColor" strokeWidth="1" />
               </>
             ) : (
-              <path d="M12 .7l3.1 6.3 7 .9-5 4.9 1.2 7-6.3-3.2-6.3 3.2 1.2-7-5-4.9 7-.9L12 .7Z"/>
+              <path d="M12 .7l3.1 6.3 7 .9-5 4.9 1.2 7-6.3-3.2-6.3 3.2 1.2-7-5-4.9 7-.9L12 .7Z" />
             )}
           </svg>
         );
@@ -36,9 +52,10 @@ function Stars({ value = 4.5 }) {
   );
 }
 
-function Card({ p, onAdd }) {
+/* ----- Single product card ----- */
+function Card({ p, onAdd, wished, onToggleWish }) {
   return (
-    <article className="group bg-[#F2EDE7] ring-1 ring-black/5">
+    <article className="group bg-[#F2EDE7] ring-1 ring-black/5 overflow-hidden">
       <Link to={`/product/${p.slug}`} className="block relative">
         <div className="aspect-[4/3] bg-[#EFE8E1] overflow-hidden">
           <img
@@ -46,8 +63,19 @@ function Card({ p, onAdd }) {
             alt={p.title}
             className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.04] group-hover:rotate-[1deg]"
             loading="lazy"
+            decoding="async"
           />
         </div>
+
+        {/* ♥ */}
+        <WishButton
+          active={wished}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onToggleWish?.();
+          }}
+        />
       </Link>
 
       <div className="px-4 pt-3 pb-4">
@@ -73,29 +101,31 @@ function Card({ p, onAdd }) {
   );
 }
 
+/* ----- Products page ----- */
 export default function Products() {
-  const { add } = useCart?.() || { add: () => {} }; // your CardContext likely has add()/inc() etc.
+  const { add } = useCart?.() || { add: () => {} };
+  const { isWished, toggle } = useWishlist(); // works because it's a named export & provider is mounted
+
   const [cat, setCat] = useState("all");
   const [sort, setSort] = useState("newest");
 
   const data = useMemo(() => {
-    let list = PRODUCTS.filter(p => (cat === "all" ? true : p.cat === cat));
-    if (sort === "price-asc") list = list.slice().sort((a,b)=>a.price-b.price);
-    if (sort === "price-desc") list = list.slice().sort((a,b)=>b.price-a.price);
-    if (sort === "name") list = list.slice().sort((a,b)=>a.title.localeCompare(b.title));
+    let list = PRODUCTS.filter((p) => (cat === "all" ? true : p.cat === cat));
+    if (sort === "price-asc") list = list.slice().sort((a, b) => a.price - b.price);
+    if (sort === "price-desc") list = list.slice().sort((a, b) => b.price - a.price);
+    if (sort === "name") list = list.slice().sort((a, b) => a.title.localeCompare(b.title));
     return list;
   }, [cat, sort]);
 
   const counts = useMemo(() => {
-    const c = { all: PRODUCTS.length, chairs:0, sofas:0, tables:0, lamps:0 };
-    PRODUCTS.forEach(p => { c[p.cat]++; });
+    const c = { all: PRODUCTS.length, chairs: 0, sofas: 0, tables: 0, lamps: 0 };
+    PRODUCTS.forEach((p) => { c[p.cat]++; });
     return c;
   }, []);
 
   return (
     <section className="w-full bg-[#F6F2EC]">
       <div className="mx-auto max-w-7xl px-5 md:px-8 pt-10 md:pt-14">
-        {/* Title row */}
         <h1 className="text-[34px] md:text-[40px] font-extrabold tracking-tight text-[#3B312A]">
           Our products
         </h1>
@@ -103,15 +133,15 @@ export default function Products() {
         {/* Filters + Sort */}
         <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap items-center gap-3">
-            {CATS.map(c => (
+            {CATS.map((c) => (
               <button
                 key={c.key}
                 onClick={() => setCat(c.key)}
-                className={`h-10 rounded-full px-5 text-[14px] border
-                  ${cat === c.key
+                className={`h-10 rounded-full px-5 text-[14px] border ${
+                  cat === c.key
                     ? "bg-[#3B312A] text-white border-[#3B312A]"
                     : "bg-transparent text-[#3B312A] border-[#3B312A]/30 hover:border-[#3B312A]"
-                  }`}
+                }`}
               >
                 {c.label} ({counts[c.key] ?? 0})
               </button>
@@ -122,7 +152,7 @@ export default function Products() {
             <span className="text-[14px] text-[#7a6d61]">Sort by</span>
             <select
               value={sort}
-              onChange={e=>setSort(e.target.value)}
+              onChange={(e) => setSort(e.target.value)}
               className="h-10 bg-white border border-[#3B312A]/30 px-3 text-[14px]"
             >
               <option value="newest">Newest</option>
@@ -135,12 +165,17 @@ export default function Products() {
 
         {/* Grid */}
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {data.map(p => (
-            <Card key={p.id} p={p} onAdd={(it)=>add ? add(it) : null} />
+          {data.map((p) => (
+            <Card
+              key={p.id}
+              p={p}
+              onAdd={(it) => (add ? add(it) : null)}
+              wished={isWished(p.id)}
+              onToggleWish={() => toggle(p)}
+            />
           ))}
         </div>
 
-        {/* Spacer bottom */}
         <div className="h-16" />
       </div>
     </section>
