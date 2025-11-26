@@ -30,3 +30,48 @@ html, body { background: var(--paper); }
 /* tiny helpers */
 .font-brand { font-family: "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
 .font-body  { font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans"; }
+
+
+/* ---- Admin CTA shine effect ---- */
+/* ---- Admin CTA shine effect ---- */
+.btn-shine {
+  /* don't touch position here, Tailwind handles it (fixed) */
+  overflow: hidden;
+}
+
+.btn-shine::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  bottom: -40%;
+  left: -60%;
+  width: 40%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.65) 45%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-120%) skewX(-20deg);
+  pointer-events: none;
+  animation: btn-shine-move 5s ease-in-out infinite;
+}
+
+@keyframes btn-shine-move {
+  0% {
+    transform: translateX(-140%) skewX(-20deg);
+    opacity: 0;
+  }
+  12% {
+    transform: translateX(120%) skewX(-20deg);
+    opacity: 1;
+  }
+  25% {
+    transform: translateX(140%) skewX(-20deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(140%) skewX(-20deg);
+    opacity: 0;
+  }
+}
