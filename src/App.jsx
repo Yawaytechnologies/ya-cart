@@ -68,32 +68,36 @@ function AdminCtaButton() {
   return (
     <Link
       to="/admin"
-      className="btn-shine fixed bottom-24 md:bottom-10 right-4 md:right-8 z-40
-                 inline-flex items-center gap-3 rounded-full
-                 bg-gradient-to-r from-orange-500 via-orange-600 to-slate-900
-                 text-white px-4 md:px-5 py-2.5 text-sm font-semibold
-                 shadow-xl shadow-orange-500/40 border border-orange-300/60
-                 hover:from-orange-400 hover:via-orange-500 hover:to-slate-900
-                 active:scale-[0.97] transition-transform transition-colors"
+      className="
+        fixed bottom-24 md:bottom-10 right-4 md:right-8 z-40
+        flex items-center justify-center
+        h-12 w-12 rounded-full
+        bg-gradient-to-r from-orange-500 via-orange-600 to-slate-900
+        text-white text-sm font-semibold
+        shadow-xl shadow-orange-500/40 border border-orange-300/60
+        active:scale-[0.97] transition-transform transition-colors
+        md:h-auto md:w-auto md:px-5 md:py-2.5 md:gap-3
+      "
       aria-label="Go to admin dashboard"
     >
-      {/* Pulsing icon */}
+      {/* Icon (mobile + desktop) */}
       <span className="relative inline-flex items-center justify-center">
-        <span className="absolute inline-flex h-8 w-8 rounded-full bg-orange-400/50 animate-ping" />
+        <span className="absolute inline-flex h-8 w-8 rounded-full bg-orange-400/40 animate-ping" />
         <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-orange-600 text-[11px] font-black">
           AD
         </span>
       </span>
 
-      <div className="flex flex-col items-start leading-tight">
-        <span className="hidden sm:inline text-[11px] uppercase tracking-wide text-orange-100/90">
+      {/* Text (desktop-only) */}
+      <div className="hidden md:flex flex-col items-start leading-tight">
+        <span className="text-[11px] uppercase tracking-wide text-orange-100/90">
           Admin portal
         </span>
         <span className="text-xs sm:text-sm">Open dashboard</span>
       </div>
 
-      {/* Professional arrow icon */}
-      <span className="flex items-center justify-center h-6 w-6 rounded-full bg-white/10">
+      {/* Arrow (desktop-only) */}
+      <span className="hidden md:flex items-center justify-center h-6 w-6 rounded-full bg-white/10">
         <svg
           viewBox="0 0 20 20"
           className="h-3.5 w-3.5 text-white"
@@ -112,6 +116,8 @@ function AdminCtaButton() {
     </Link>
   );
 }
+
+
 
 /* ---------------- Admin layout ---------------- */
 function AdminLayout() {
