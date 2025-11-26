@@ -183,7 +183,7 @@ const InvoiceList = () => {
     setPage(newPage);
   };
 
-  const handleRowClick = (id) => {
+  const handleRowClick = () => {
     // Adapt this when you wire dynamic details
     navigate("/admin/invoices/details");
   };

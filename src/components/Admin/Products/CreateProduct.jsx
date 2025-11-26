@@ -274,7 +274,7 @@ const Checkbox = ({ label }) => (
   </label>
 );
 
-const ToggleTextField = ({ label, placeholder }) => (
+const ToggleTextField = ({  placeholder }) => (
   <div className="flex items-center gap-3">
     <button
       type="button"
