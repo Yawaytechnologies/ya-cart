@@ -54,6 +54,7 @@ function MobileNavDrawer({ open, onClose, isTransparent, wishCount = 0 }) {
             // leaving Wishlist inside the drawer menu is fine; header icon handles top bar
             { label: "Wishlist", href: "/wishlist" },
             { label: "Contact Us", href: "/contact" },
+            { label: "Admin Dashboard", href: "/admin" },
           ].map((item) => (
             <Link
               key={item.href}
